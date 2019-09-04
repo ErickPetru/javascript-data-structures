@@ -11,6 +11,20 @@
         "--experimental-modules",
         "--es-module-specifier-resolution=node"
       ]
+    },
+
+    {
+      "type": "node",
+      "name": "Run Tests",
+      "request": "launch",
+      "args": [
+        "--runInBand"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest"
     }
   ]
 }
