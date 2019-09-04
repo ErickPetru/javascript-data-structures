@@ -8,8 +8,10 @@
     "type": "git",
     "url": "https://github.com/ErickPetru/javascript-data-structures.git"
   },
+  "type": "module",
   "main": "index.js",
   "scripts": {
+    "start": "node --experimental-modules --es-module-specifier-resolution=node index.js",
     "test": "jest"
   },
   "dependencies": {

@@ -1,25 +1,37 @@
 import 'colors'
-import fs from 'fs'
-import path from 'path'
+import { readdirSync } from 'fs'
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url';
 import prompt from 'async-prompt'
 
-console.clear()
-console.log('Data Structures in JavaScript\n'.cyan)
+(async () => {
+  try {
+    console.clear()
+    console.log('Data Structures in JavaScript\n'.cyan)
 
-const files = fs.readdirSync(path.join(__dirname, 'samples'))
-files.forEach((file, i) => console.log(`${ (`(${ i + 1 })`).yellow } ${ file.replace(/\.js/g, '').green }`))
+    const dir = join(dirname(fileURLToPath(import.meta.url)), 'samples')
+    let files = readdirSync(dir, { withFileTypes: true })
 
-console.log()
-const option = await prompt('Which sample number do you want to run? '.yellow)
+    files = files.filter(file => file.isFile())
+    files.forEach((file, i) => console.log(`${ (`(${ i + 1 })`).yellow
+      } ${ file.name.replace(/\.js/g, '').green }`))
 
-try {
-  const target = require(`./samples/${ files[option - 1] }`)
-  console.clear()
-  if (!target.default || typeof target.default !== 'function') throw new Error()
-  await target.default()
-  console.log()
-} catch (error) {
-  if (error && error.message.indexOf('Cannot find module') === -1) console.error(error)
-  else console.error('Sorry, it\'s not a valid option!'.red)
-  console.log()
-}
+    console.log()
+    const option = await prompt('Which sample do you wanna run? '.yellow)
+
+    if (!files[option - 1])
+      throw new Error('Cannot find module')
+
+    const target = await import(`./samples/${ files[option - 1].name }`)
+    if (!target.default || typeof target.default !== 'function')
+      throw new Error('Cannot find module')
+
+    console.clear()
+    await target.default.call(this)
+    console.log()
+  } catch (error) {
+    if (error && error.message) console.error(error)
+    else console.error('Sorry, something wents wrong!'.red)
+    console.log()
+  }
+}).call(this)

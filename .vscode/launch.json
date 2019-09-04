@@ -4,12 +4,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Launch Node",
       "program": "${workspaceFolder}\\index.js",
       "console": "integratedTerminal",
       "runtimeArgs": [
-        "-r",
-        "esm"
+        "--experimental-modules",
+        "--es-module-specifier-resolution=node"
       ]
     }
   ]
